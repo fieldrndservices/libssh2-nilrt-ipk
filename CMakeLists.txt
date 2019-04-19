@@ -11,11 +11,27 @@ set(CPACK_DEBIAN_PACKAGE_NAME "libssh2")
 set(CPACK_DEBIAN_PACKAGE_VERSION "1.8.2")
 set(CPACK_DEBIAN_PACKAGE_RELEASE "r0.1")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "cortexa9-vfpv3")
-set(CPACK_DEBIAN_PACKAGE_FILE_NAME "${CPACK_DEBIAN_PACKAGE_NAME}_${CPACK_DEBIAN_PACKAGE_VERSION}-${CPACK_DEBIAN_PACKAGE_RELEASE}_${CPACK_DEBIAN_PACKAGE_ARCHTIECTURE}.ipk")
+set(CPACK_DEBIAN_FILE_NAME "${CPACK_DEBIAN_PACKAGE_NAME}_${CPACK_DEBIAN_PACKAGE_VERSION}-${CPACK_DEBIAN_PACKAGE_RELEASE}_${CPACK_DEBIAN_PACKAGE_ARCHTIECTURE}.ipk")
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Client-side C library implementing the SSH2 protocol")
 set(CPACK_DEBIAN_PACKAGE_SECTION "libs")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Christopher R. Field <chris@fieldrndservices.com>")
 
 include(ExternalProject)
 include(External_libssh2)
+include(GNUInstallDirs)
+
+install(FILES
+  "${PROJECT_SOURCE_DIR}/libssh2/include/libssh2.h"
+  "${PROJECT_SOURCE_DIR}/libssh2/include/libssh2_publickey.h"
+  "${PROJECT_SOURCE_DIR}/libssh2/include/libssh2_sftp.h"
+  DESTINATION
+  ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/libssh2/src/libssh2.so.1.0.1"
+  "${PROJECT_BINARY_DIR}/libssh2/src/libssh2.so.1"
+  "${PROJECT_BINARY_DIR}/libssh2/src/libssh2.so"
+  DESTINATION
+  ${CMAKE_INSTALL_LIBDIR})
+
 include(CPack)
