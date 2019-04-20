@@ -26,30 +26,29 @@ This project is structured as a CMake superbuild, using [git](https://git-scm.co
 
 Ensure that a cRIO has been suitably configured as a build environment before completing the following steps to create the IPK file.
 
-1. Download this project as an compressed tar file (*.tar.gz) to a host computer.
-2. Connect the cRIO running NI Linux RT to host computer.
-3. Power on the cRIO.
-4. Transfer the compressed tar file for this project to the `/tmp` folder of the cRIO. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO.
-5. Log into the cRIO via SSH.
-6. Navigate to the `/tmp` folder.
+1. Clone this project on a host computer.
 
    ```
-   cd `/tmp`
-   ```
-
-7. Extract the compressed tar file.
-
-   ```
-   tar -xzvf libssh2-nilrt-ipk.tar.gz
+   git clone https://github.com/fieldrndservices/libssh2-nilrt-ipk.git
    ```
    
-8. Navigate into the extracted folder.
+2. Update the git submodules to get the [libssh2](https://github.com/libssh2/libssh2) source code.
 
    ```
-   cd libssh2-nilrt-ipk
+   git submodule update --init --recursive
+   ```
+   
+3. Connect the cRIO running NI Linux RT to host computer.
+4. Power on the cRIO.
+5. Transfer the contents of the cloned source code, including the `libssh2` directory, to the cRIO's `/tmp` directory. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO. It may help to first create an archive (ZIP or compressed tar, *.tar.gz) file to easily transfer the contents. The `.git` hidden file does _not_ need to be transferred.
+6. Log into the cRIO via SSH.
+7. Navigate to the source code on the cRIO.
+
+   ```
+   cd `/tmp/libssh2-nilrt-ipk`
    ```
 
-9. Execute the following commands to build the IPK file:
+8. Execute the following commands to build the IPK file:
 
    ```
    mkdir build
