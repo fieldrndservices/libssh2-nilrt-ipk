@@ -36,26 +36,26 @@ Ensure that a cRIO has been suitably configured as a build environment before co
    ``` 
    
    where `XXX.XXX.XXX.XXX` is the IP address, or host name, of the cRIO. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO.
-6. Log into the cRIO via SSH.
-7. Navigate to the `/tmp` folder on the cRIO.
+5. Log into the cRIO via SSH.
+6. Navigate to the `/tmp` folder on the cRIO.
 
    ```
    cd `/tmp`
    ```
    
-8. Extract the compressed tar file.
+7. Extract the compressed tar file.
 
    ```
    tar -xzf libssh2-nilrt-ipk.tar.gz
    ```
    
-9. Navigate into the `libssh2-nilrt-ipk` folder.
+8. Navigate into the `libssh2-nilrt-ipk` folder.
 
    ```
    cd libssh2-nilrt-ipk
    ```
    
-10. Execute the following commands to build the IPK file:
+9. Execute the following commands to build the IPK file:
 
    ```
    mkdir build
