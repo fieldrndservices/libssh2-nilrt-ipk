@@ -1,90 +1,65 @@
-# Creating a libssh2 IPK with a NI Linux RT-enabled cRIO 
+# libssh2-nilrt-ipk: A CMake Superbuild for a libssh2 IPK Package
 
-1. Build the libssh2 shared object library with the cRIO
-2. Move into the `bin` folder if not already there after building the libssh2 shared library.
+The libssh2-nilrt-ipk project is a [Cmake](https://cmake.org/) [superbuild](https://blog.kitware.com/cmake-superbuilds-git-submodules/) to build a [opkg package (.ipk)](https://openwrt.org/docs/guide-user/additional-software/opkg) of the [libssh2](https://www.libssh2.org) library for the [NI Linux RT](http://www.ni.com/en-us/innovations/white-papers/13/introduction-to-ni-linux-real-time.html) operating system that is used for [National Instruments (NI)](https://www.ni.com) embedded hardware, such as a [CompactRIO (cRIO)](http://www.ni.com/en-us/shop/compactrio.html).
+
+NI provides a package manager (opkg) and a repository (feed) to optionally install and extend the capabilities of their embedded hardware running the NI Linux RT operating system. There are many packages available from NI's official repository, but libssh2 is not available in the repository. The libssh2 library is used for client-side SSH and SFTP communication. It does _not_ implement a SSH server. It is specifically targeted at enabling clients to communicate with a SSH/SFTP server. This project is intended to provide a libssh2 package that can be installed on the embedded hardware from NI using opkg package manager.
+
+This project is structured as a CMake superbuild, using [git](https://git-scm.com/) [submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules). Thus, there is no source code folder. The "source code" for this project is all related to building the libssh2 source code provided as a git submodule and packaging it into a IPK file using CMake. The source code for the libssh2 library is "imported" into this project as a git submodule instead of using CMake's `ExternalProject_Add` features because the build procedure must be run on a properly configured cRIO that typically does not have access to the Internet. Importing the libssh2 source code via a git submodule makes it easier to simply download the entire contents of this project and transfer to the cRIO in an offline fashion.
+
+## Quick Start
+
+1. Download a IPK file from available from the [Releases](https://github.com/fieldrndservices/libssh2-nilrt-ipk/releases) to a host computer.
+2. Connect a cRIO to the host computer.
+3. Power on the cRIO.
+4. Transfer the IPK file to the cRIO.
+5. Log into the cRIO with a suitable SSH client from the host computer.
+6. Navigate to the directory containing the IPK file.
+7. Execute the following command:
 
    ```
-   $ cd bin
+   opkg install libssh2*.ipk
    ```
 
-3. Create the folder structure with the following commands:
+   The libssh2 library will now be available to the cRIO.
+   
+## Build
+
+Ensure that a cRIO has been suitably configured as a build environment before completing the following steps to create the IPK file.
+
+1. Download this project as an compressed tar file (*.tar.gz) to a host computer.
+2. Connect the cRIO running NI Linux RT to host computer.
+3. Power on the cRIO.
+4. Transfer the compressed tar file for this project to the `/tmp` folder of the cRIO. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO.
+5. Log into the cRIO via SSH.
+6. Navigate to the `/tmp` folder.
 
    ```
-   $ mkdir -p ipk/control
-   $ mkdir -p ipk/data/usr/libs
-   $ mkdir -p ipk/data/usr/include
+   cd `/tmp`
+   ```
+
+7. Extract the compressed tar file.
+
+   ```
+   tar -xzvf libssh2-nilrt-ipk.tar.gz
    ```
    
-4. Copy the build output files for the libssh2 shared object library to the appropriate destinations with the following commands:
+8. Navigate into the extracted folder.
 
    ```
-   $ cp ../include/*.h ipk/data/usr/include/
-   $ cp src/libssh2.so.1.0.1 ipk/data/usr/lib/
-   $ cp -a src/libssh2.so.1 ipk/data/usr/lib/
-   ```
-   
-5. Change permission for the header files in the `include` folder with the following command:
-
-   ```
-   $ chmod a-x ipk/data/usr/include/*.h
-   ```
-   
-6. Create the `control` file in the `control` folder with the following content:
-
-   ```
-   Package: libssh2
-   Version: 1.8.2-r0.1
-   Description: client-side C library implementing the SSH2 protocol
-   Section: libs
-   Priority: optional
-   Maintainer: Christopher R. Field <chris@fieldrndservices.com>
-   Architecture: cortexa9-vfpv3
-   Homepage: https://github.com/fieldrndservices/libssh2-ipk
-   ```
-   
-   Note, the `Architecture` value must be changed to match the cRIO's architecture, either: `cortexa9-vfpv3` or `core2-64`.
-   
-7. Create the `debian-binary` file with the following command:
-
-   ```
-   $ echo 2.0 > ipk/debian-binary
-   
+   cd libssh2-nilrt-ipk
    ```
 
-8. Move into the `ipk/control` folder with the following command:
+9. Execute the following commands to build the IPK file:
 
    ```
-   $ cd ipk/control
+   mkdir build
+   cd build
+   cmake ..
+   cmake --build . --target ipk
    ```
-   
-9. Archive the `control` folder with the following command:
 
-   ```
-   $ tar --numeric-owner --group=0 --owner=0 -czf ../control.tar.gz ./*
-   ```
-  
-10. Move to the `ipk/data` folder with the following command:
+   A IPK file will be created in the `build` directory. See the [Quick Start](#quick-start) instructions for installation.
 
-   ```
-   $ cd ../data
-   ```
-   
-10. Archive the `data` folder with the following command:
+## License
 
-   ```
-   $ tar --numeric-owner --group=0 --owner=0 -czf ../data.tar.gz ./* 
-   ```
-   
-11. Move to the parent folder, i.e. `ipk`, with the following command:
-
-   ```
-   $ cd ..
-   ```
-   
-12. Create the IPK file with the following command:
-
-   ```
-   $ ar r libssh2_1.8.2-r0.1_cortexa9-vfpv3.ipk control.tar.gz data.tar.gz debian-binary
-   ```
-   
-   The "cortexa9-vfpv3" in the IPK file name should be replaced with the cRIO's architecture and should match the value used for the `Architecture` field in the `control` file from earlier (either `cortexa9-vfpv3` or `core2-64`). 
+The `libssh2-nilrt-ipk` project is licensed under the [BSD-3-Clause license](https://opensource.org/licenses/BSD-3-Clause). See the [LICENSE](https://github.com/fieldrndservices/libssh2-nilrt-ipk/blob/master/LICENSE) file for more information about licensing and copyright. Note, this license only covers files specific to this project and _not_ submodules (libssh2). Please see the submodules for specifics on their respective licensing and copyright.
