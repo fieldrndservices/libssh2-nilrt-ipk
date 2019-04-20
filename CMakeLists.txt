@@ -34,7 +34,11 @@ include(External_${LIBSSH2})
 # can be used to set the field values for the `control` file of the IPK file if needed.
 
 # Package-wide variables
-set(PACKAGE_ARCH "cortexa9-vfpv3")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+  set(PACKAGE_ARCH "cortexa9-vfpv3")
+else()
+  set(PACKAGE_ARCH "core2-64")
+endif()
 set(PACKAGE_FILE_NAME "${LIBSSH2}_${LIBSSH2_VERSION}-r${PROJECT_VERSION}_${PACKAGE_ARCH}")
 
 # CPack configuration
