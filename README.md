@@ -26,29 +26,36 @@ This project is structured as a CMake superbuild, using [git](https://git-scm.co
 
 Ensure that a cRIO has been suitably configured as a build environment before completing the following steps to create the IPK file.
 
-1. Clone this project on a host computer.
+1. Download a compressed tar file from the [Releases](https://github.com/fieldrndservices/libssh2-nilrt-ipk/releases) to a host computer.
+2. Connect the cRIO running NI Linux RT to host computer.
+3. Power on the cRIO.
+4. Transfer the compressed tar file to the `/tmp` folder on the cRIO.
 
    ```
-   git clone https://github.com/fieldrndservices/libssh2-nilrt-ipk.git
-   ```
+   scp libssh2-nilrt-ipk.tar.gz admin@XXX.XXX.XXX.XXX:/tmp/
+   ``` 
    
-2. Update the git submodules to get the [libssh2](https://github.com/libssh2/libssh2) source code.
-
-   ```
-   git submodule update --init --recursive
-   ```
-   
-3. Connect the cRIO running NI Linux RT to host computer.
-4. Power on the cRIO.
-5. Transfer the contents of the cloned source code, including the `libssh2` directory, to the cRIO's `/tmp` directory. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO. It may help to first create an archive (ZIP or compressed tar, *.tar.gz) file to easily transfer the contents. The `.git` hidden file does _not_ need to be transferred.
+   where `XXX.XXX.XXX.XXX` is the IP address, or host name, of the cRIO. Note, the contents of the `/tmp` folder are deleted after each reboot/power cycle of the cRIO.
 6. Log into the cRIO via SSH.
-7. Navigate to the source code on the cRIO.
+7. Navigate to the `/tmp` folder on the cRIO.
 
    ```
-   cd `/tmp/libssh2-nilrt-ipk`
+   cd `/tmp`
    ```
+   
+8. Extract the compressed tar file.
 
-8. Execute the following commands to build the IPK file:
+   ```
+   tar -xzf libssh2-nilrt-ipk.tar.gz
+   ```
+   
+9. Navigate into the `libssh2-nilrt-ipk` folder.
+
+   ```
+   cd libssh2-nilrt-ipk
+   ```
+   
+10. Execute the following commands to build the IPK file:
 
    ```
    mkdir build
