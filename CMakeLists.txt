@@ -77,24 +77,17 @@ include(CPack)
 
 # The `include(CPack)` command will create the `package` and `package_source`
 # build targets, which will build a deb file if invoked as `cmake --build .
-# --target package`. For CMake 3.5 or earlier, it is not possible to change the
+# --target package`. For CMake 3.9 or earlier, it is not possible to change the
 # file extension from deb to ipk with the Cpack DEB generator. Newer versions of
 # CMake/CPack have the `CPACK_DEBIAN_FILE_NAME` variable that can be set with
-# either the `.deb` or `.ipk` file extension. Because of a dependency issue with
-# the libarchive package, CMake 3.4 is used. Thus, the deb file must be renamed
-# to ipk (they are same structure, just different extensions) after the deb
-# package is built.
+# either the `.deb` or `.ipk` file extension.
 #
 # Because of a bug, or missing feature, in CMake and CPack, it is not possible
 # for a custom target or command to depend on the `package` or `package_source`
 # build targets created by the `include(CPack)` command. Instead, a custom build
 # target is added that first builds the `package` target then renames the deb.
-# This is essentially a hack to workaround two problems: older version of
+# This is essentially a hack to workaround two problems: older versions of
 # CMake/CPack and inability to depend on built-in targets.
-#
-# The real solution is to be able to upgrade to a newer version of CMake (3.6 or
-# higher) and just specify the ipk file extension in the
-# `CPACK_DEBIAN_FILE_NAME` variable.
 add_custom_target(ipk
   COMMAND "${CMAKE_COMMAND}" --build . --target package
   COMMAND mv ${PACKAGE_FILE_NAME}.deb ${PACKAGE_FILE_NAME}.ipk
