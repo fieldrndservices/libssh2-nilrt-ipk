@@ -24,7 +24,7 @@ This project is structured as a CMake superbuild. There is no source code folder
    
 ## Build
 
-Ensure that a cRIO has been suitably configured as a build environment before completing the following steps to create the IPK file.
+Ensure that a cRIO has been [suitably configured as a build environment](https://gist.github.com/volks73/ff5bdf361c1dccd6005bfaa31ab80441) before completing the following steps to create the IPK file.
 
 1. Download a compressed tar file from the [Releases](https://github.com/fieldrndservices/libssh2-nilrt-ipk/releases) to a host computer.
 2. Connect the cRIO running NI Linux RT to host computer.
