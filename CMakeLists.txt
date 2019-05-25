@@ -5,7 +5,6 @@ set(PROJECT_DESCRIPTION "A CMake Super Build to create libssh2 IPK files for the
 
 # CMake extensions
 include(ExternalProject)
-include(GNUInstallDirs)
 
 # libssh2 configuration and build
 set(LIBSSH2 "libssh2")
@@ -53,21 +52,21 @@ install(FILES
   "${LIBSSH2_INCLUDE_DIR}/libssh2_publickey.h"
   "${LIBSSH2_INCLUDE_DIR}/libssh2_sftp.h"
   DESTINATION
-  ${CMAKE_INSTALL_INCLUDEDIR}
+  "/usr/include"
 )
 
 install(FILES
   "${LIBSSH2_LIBRARY_DIR}/libssh2.so.1.0.1"
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
   DESTINATION
-  ${CMAKE_INSTALL_LIBDIR}
+  "/usr/lib"
 )
 
 install(FILES
   "${LIBSSH2_LIBRARY_DIR}/libssh2.so.1"
   "${LIBSSH2_LIBRARY_DIR}/libssh2.so"
   DESTINATION
-  ${CMAKE_INSTALL_LIBDIR}
+  "/usr/lib"
 )
 
 include(CPack)
