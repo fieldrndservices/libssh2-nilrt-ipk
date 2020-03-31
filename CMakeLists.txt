@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4)
-project(libssh2-nilrt-ipk VERSION 0.2 LANGUAGES C)
+project(libssh2-nilrt-ipk VERSION 0.3 LANGUAGES C)
 set(PROJECT_URL "https://github.com/fieldrndservices/libssh2-nilrt-ipk")
 set(PROJECT_DESCRIPTION "A CMake Super Build to create libssh2 IPK files for the NI Linux RT operating system")
 
@@ -8,7 +8,7 @@ include(ExternalProject)
 
 # libssh2 configuration and build
 set(LIBSSH2 "libssh2")
-set(LIBSSH2_VERSION "1.8.2")
+set(LIBSSH2_VERSION "1.9.0")
 ExternalProject_Add(${LIBSSH2}
   PREFIX ${LIBSSH2}
   URL file:///${CMAKE_CURRENT_SOURCE_DIR}/${LIBSSH2}-${LIBSSH2_VERSION}.tar.gz
